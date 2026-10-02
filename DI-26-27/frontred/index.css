@@ -1,0 +1,85 @@
+/* Configuración general y centrado en pantalla */
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #f4f7f6;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    margin: 0;
+}
+
+h1 {
+    color: #333333;
+    margin-bottom: 20px;
+}
+
+/* Contenedor del formulario */
+form {
+    background-color: #ffffff;
+    padding: 30px;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 380px;
+}
+
+/* Espaciado y alineación de etiquetas y campos */
+form div {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 15px;
+}
+
+label {
+    font-weight: 600;
+    margin-bottom: 5px;
+    color: #495057;
+    font-size: 14px;
+}
+
+/* Estilo para las cajas de texto */
+input[type="text"] {
+    padding: 10px;
+    border: 1px solid #ced4da;
+    border-radius: 5px;
+    font-size: 14px;
+    transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+input[type="text"]:focus {
+    border-color: #007bff;
+    box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.25);
+    outline: none;
+}
+
+/* Botones */
+input[type="button"] {
+    padding: 10px 18px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 14px;
+    margin-right: 8px;
+    transition: background-color 0.2s;
+}
+
+#obtener {
+    background-color: #6c757d;
+    color: white;
+}
+
+#obtener:hover {
+    background-color: #5a6268;
+}
+
+#insertar {
+    background-color: #007bff;
+    color: white;
+}
+
+#insertar:hover {
+    background-color: #0056b3;
+}

@@ -1,0 +1,19 @@
+
+/* Respuesta
+{
+    data: [{}, {}],
+    success: true/false,
+    msg: "",
+    error: [{msg: , errro:}, {}...]
+}
+
+// Envío
+{
+    action: insert/delete/update/get,
+    data: [{}],
+    filters: {},
+    page: ,
+    offset: ,
+}
+
+*/
