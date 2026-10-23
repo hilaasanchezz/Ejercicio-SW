@@ -57,14 +57,42 @@ class Alumno {
         }
     }
 
+    // Método para eliminar este alumno de la BD (se busca por su DNI)
     public function eliminar($pdo) {
         try {
-            $sql = "SELECT * FROM alumno WHERE dni = :dni";
-            
+            $sql = "DELETE FROM alumno WHERE dni = :dni";
+
             $stmt = $pdo->prepare($sql);
             $stmt->execute([':dni' => $this->dni]);
 
-            
+            // rowCount() devuelve cuántas filas se han borrado.
+            // Si es 0, es que no existía ningún alumno con ese DNI.
+            return $stmt->rowCount() > 0;
+        } catch (PDOException $e) {
+            return false;
+        }
+    }
+
+    // Método para actualizar los datos de este alumno en la BD (se busca por su DNI)
+    public function actualizar($pdo) {
+        try {
+            $sql = "UPDATE alumno 
+                    SET nombre = :nombre, apellido_1 = :apellido_1, localidad = :localidad
+                    WHERE dni = :dni";
+
+            $stmt = $pdo->prepare($sql);
+            $stmt->execute([
+                ':dni'        => $this->dni,
+                ':nombre'     => $this->nombre,
+                ':apellido_1' => $this->apellido_1,
+                ':localidad'  => $this->localidad
+            ]);
+
+            // rowCount() devuelve cuántas filas coinciden con el DNI.
+            // Si es 0, es que no existía ningún alumno con ese DNI.
+            return $stmt->rowCount() > 0;
+        } catch (PDOException $e) {
+            return false;
         }
     }
 }

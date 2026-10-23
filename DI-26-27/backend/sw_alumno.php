@@ -5,6 +5,10 @@ require_once 'model/Alumno.php';
 // Indicar que la respuesta es un JSON
 header('Content-Type: application/json; charset=UTF-8');
 
+// Obtenemos la conexión a la BD a través del Singleton.
+// Siempre devuelve la misma instancia, así que solo se conecta una vez.
+$pdo = Conection::getInstance()->getPDO();
+
 // Obtener el contenido del cuerpo de la petición POST
 $contenidoJSON = file_get_contents('php://input');
 
@@ -26,10 +30,14 @@ switch($request["action"]){
                 $request["data"]["localidad"]
             );
 
-            $nuevoAlumno->insertar($pdo);
-
-            $msg = "Alumno insertado correctamente";
-            $data = $request["data"];
+            // insertar() devuelve true o false, así que comprobamos el resultado
+            if ($nuevoAlumno->insertar($pdo)) {
+                $msg = "Alumno insertado correctamente";
+                $data = $request["data"];
+            } else {
+                $success = false;
+                $msg = "No se ha podido insertar el alumno (¿DNI repetido?)";
+            }
 
         } catch (PDOException $e) {
             $success = false;
@@ -54,6 +62,50 @@ switch($request["action"]){
         } catch (PDOException $e){
             $success = false;
             $msg = "Error conexión base de datos";
+        }
+        break;
+
+    case "delete":
+        $alumnoEliminar["dni"] = $request["data"]["dni"];
+        try {
+            $eliminar = new Alumno($alumnoEliminar["dni"], "", "", "");
+            $resultadoEliminar = $eliminar->eliminar($pdo);
+
+            if ($resultadoEliminar) {
+                $msg = "Alumno eliminado correctamente";
+                $data = $request["data"];
+            } else {
+                $success = false;
+                $msg = "No existe ningún alumno con el DNI introducido";
+            }
+
+        } catch (PDOException $e) {
+            $success = false;
+            $msg = "Error conexión base de datos";
+        }
+        break;
+
+    case "update":
+        try {
+            $alumnoActualizar = new Alumno(
+                $request["data"]["dni"],
+                $request["data"]["nombre"],
+                $request["data"]["apellido_1"],
+                $request["data"]["localidad"]
+            );
+            $resultadoActualizar = $alumnoActualizar->actualizar($pdo);
+
+            if ($resultadoActualizar) {
+                $msg = "Alumno actualizado correctamente";
+                $data = $request["data"];
+            } else {
+                $success = false;
+                $msg = "No existe ningún alumno con el DNI introducido";
+            }
+
+        } catch (PDOException $e) {
+            $success = false;
+            $msg = "Error al actualizar en la base de datos: " . $e->getMessage();
         }
         break;
 

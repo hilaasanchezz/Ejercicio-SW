@@ -85,6 +85,82 @@ function insertAlumno(){
     //ya que el backend espera recibir los datos en este formato para poder procesarlos correctamente
 }
 
+//Boton para eliminar un alumno de la base de datos
+// El evento "click" se activa al hacer click en el boton y llama a la funcion deleteAlumno()
+const buttonEliminar = document.getElementById("eliminar");
+buttonEliminar.addEventListener("click", (event) => {
+    deleteAlumno();
+});
+
+//Para eliminar solo necesitamos el dni, que es por lo que se busca al alumno
+function deleteAlumno(){
+    console.log("Pulsado botón eliminar");
+
+    let alumnoEliminar = {};
+    alumnoEliminar.dni = document.getElementById("dni").value;
+
+    let request = {};
+    request.action = "delete"; //Declaramos la accion y le decimos que es tipo Delete
+    request.data = alumnoEliminar;
+
+    fetch(url, {
+        method: "POST",
+        body: JSON.stringify(request),
+        headers: {
+            "Content-Type": "application/json",
+        }
+    })
+    .then((res) => res.json())
+    .then((response) => {
+        console.log("Success:", response);
+        alert(response.msg);
+
+        //Si se ha borrado bien, vaciamos el formulario
+        if(response.success){
+            document.getElementById("dni").value = "";
+            document.getElementById("nombre").value = "";
+            document.getElementById("apellido_1").value = "";
+            document.getElementById("localidad").value = "";
+        }
+    })
+    .catch((error) => console.error("Error:", error));
+}
+
+
+
+//Boton para actualizar los datos de un alumno en la base de datos
+// El evento "click" se activa al hacer click en el boton y llama a la funcion updateAlumno()
+const buttonActualizar = document.getElementById("actualizar");
+buttonActualizar.addEventListener("click", (event) => {
+    updateAlumno();
+});
+
+//Se busca al alumno por su dni y se le cambian el resto de datos por los del formulario
+function updateAlumno(){
+    console.log("Pulsado botón actualizar");
+
+    let alumno = {};
+    alumno.dni = document.getElementById("dni").value;
+    alumno.nombre = document.getElementById("nombre").value;
+    alumno.apellido_1 = document.getElementById("apellido_1").value;
+    alumno.localidad = document.getElementById("localidad").value;
+
+    let request = {};
+    request.action = "update"; //Declaramos la accion y le decimos que es tipo Update
+    request.data = alumno;
+
+    fetch(url, {
+        method: "POST",
+        body: JSON.stringify(request),
+        headers: {
+            "Content-Type": "application/json",
+        }
+    })
+    .then((res) => res.json())
+    .then((response) => { console.log("Success:", response); alert(response.msg); })
+    .catch((error) => console.error("Error:", error));
+}
+
 //----------------------------------------------------------------------------------------------------------//    
 // Hacer que al pasar el raton por encima del input se colorease de azul 
 /*const inputNombre = document.getElementById("nombre");
